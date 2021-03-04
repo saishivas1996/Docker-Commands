@@ -71,4 +71,144 @@ $docker container rm -f containerid1
 $docker image rm imageid
 
 $docker rmi imageid
+   -- if you want to remove multiple images
+ $docker rmi imageid1 imageid2 imageid3
+ 
+## CONTAINER INFO
+
+## View info on container
+
+$ docker inspect containerid
+
+## Specific property (--format)
+
+$ docker inspect --format '{{ .NetworkSettings.IPAddress }}' containerid
+
+## Performance stats (cpu, mem, network, disk, etc)
+
+$ docker stats containerid
+
+## ACCESSING CONTAINERS
+
+## Create new nginx container and bash into
+
+$ docker exec -it containerid bash
+
+- i = interactive Keep STDIN open if not attached
+- t = tty - Open prompt
+
+**For Git Bash, use "winpty"**
+
+$docker exec -it containerid bash
+
+# NETWORKING
+
+## "bridge" or "docker0" is the default network
+
+## Get port
+
+$ docker port containerid
+
+## List networks
+
+$ docker network ls
+
+## Inspect network
+
+$ docker network inspect networkname
+ -- example docker network inspect bridge
+ -- example docker network inspect host
+("bridge" is default)
+
+### Create network
+
+$ docker network create newnetworkname
+
+### Create container on network
+
+$ docker container run -d --name newcontainername --network newnetworkname nginx
+
+### Connect existing container to network
+
+$ docker network connect newnetowrkname newcontainername
+
+### Disconnect container from network
+
+$ docker network disconnect networkname containername
+
+### Detach network from container
+
+$ docker network disconnect
+
+##image tagging
+$docker tag imagename:[imagetag] newimagename:[newtagname]
+  -- example docker tag ubuntu:latest myubuntu:v1
+  
+## retag existing images
+
+$docker tag ubuntu saishiva/ubuntu
+
+# VOLUMES
+
+### Volume - Makes special location outside of container UFS. Used for databases
+
+### Bind Mount -Link container path to host path
+
+### Check volumes
+
+$ docker volume ls
+
+### Cleanup unused volumes
+
+$ docker volume prune
+
+#### TIP: Mounts
+
+- You will also see the volume under mounts
+- Container gets its own uniqe location on the host to store that data
+- Source: xxx is where it lives on the host
+
+### Check volumes
+
+$ docker volume ls
+
+**There is no way to tell volumes apart for instance with 2 mysql containers, so we used named volumes**
+
+### Named volumes (Add -v command)(the name here is mysql-db which could be anything)
+$ docker container run -d --name myubuntu -v ubuntu-source:inside-container ubuntu
+```
+
+### Inspect new named volume
+
+```
+docker volume inspect mysql-db
+```
+
+# BIND MOUNTS
+
+- Can not use in Dockerfile, specified at run time (uses -v as well)
+- ... run -v /Users/brad/stuff:/path/container (mac/linux)
+- ... run -v //c/Users/brad/stuff:/path/container (windows)
+
+**TIP: Instead of typing out local path, for working directory use $(pwd):/path/container - On windows may not work unless you are in your users folder**
+
+### Run and be able to edit index.html file (local dir should have the Dockerfile and the index.html)
+
+```
+$ docker container run  -p 80:80 -v $(pwd):/usr/share/nginx/html nginx
+```
+
+### Go into the container and check
+
+```
+$ docker container exec -it nginx bash
+$ cd /usr/share/nginx/html
+$ ls -al
+```
+
+### You could create a file in the container and it will exiost on the host as well
+
+```
+$ touch test.txt
+
     
