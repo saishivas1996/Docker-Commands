@@ -1,0 +1,74 @@
+## Docker installation commands##
+    installing Docker in Ubuntu
+$sudo apt-get update
+
+$sudo apt-get install -y docker.io
+
+$sudo systemctl start docker
+
+$sudo systemctl enable docker
+
+## Docker version
+
+$docker --version
+
+## show info like containers, etc
+
+$docker info
+
+## image pulling
+$docker pull image-name
+exanple: docker pull ubuntu
+         docker pull centos
+
+## list of images
+$docker images 
+
+## docker run
+
+$docker run -it -d image-name
+example: docker run -it -d ubuntu
+         docker run -it -d centos
+        
+$docker run -it -p 8080:80 --name myubuntu ubuntu 
+  -- in this above command we are running the container in foregorund and we are adding port number to the container to connect from outside the conatiner
+  -- 8080 is use outside docker
+  -- 80 is use to connect the conatiners inside
+ 
+$docker run -d -p 8080:80 --name myubuntu ubuntu
+  -- in this above command we are running the conatiner in detach mode or in background mode
+  
+## running container list
+
+$docker ps 
+
+## list all containers
+
+$docker ps -a
+
+## stop container
+$docker stop container-id
+  -- if you have multiple contianer to stop
+$docker stop containerid1 contianerid2 containerid3
+
+## start container
+$docker start conatiner-id
+   -- if you want to start multiple containers at a time
+$docker start containerid1 containerid2 containerid3
+
+## restart container
+$docker restartconatiner-id
+   -- if you want to restart multiple containers at a time
+$docker restart containerid1 containerid2 containerid3
+
+## Remove container (Can not remove running containers, must stop first)
+$docker rm containerid1 containerid2 containerid3
+
+## To remove a running container use force(-f)
+$docker container rm -f containerid1
+
+## To remove images 
+$docker image rm imageid
+
+$docker rmi imageid
+    
