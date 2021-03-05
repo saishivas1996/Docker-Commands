@@ -1,0 +1,11 @@
+FROM ubuntu ##sets the image
+MAINTAINER saishivas1996 (saishivas1996@gmail.com) ##maintainer of the image
+RUN apt-get update ##build with dependies or packages installed with base os
+RUN apt-get install -y nginx && RUN apt-get install -y python  ##build with dependies or packages installed with base os
+WORKDIR /app ## Setting the working directory to /app
+COPY /home/helloworld.txt /app  ##copying the files from local machine from path /home/
+CMD ["ls","-la", "pwd"] # Run app.py when the container launches
+ENTRYPOINT [“/usr/sbin/nginx”,”-g”,”daemon off;”] ##used to specify default app that you want too run
+EXPOSE 80 ##eposing the port
+
+https://localhost:80
