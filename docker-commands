@@ -175,14 +175,11 @@ $ docker volume ls
 **There is no way to tell volumes apart for instance with 2 mysql containers, so we used named volumes**
 
 ### Named volumes (Add -v command)(the name here is mysql-db which could be anything)
-$ docker container run -d --name myubuntu -v ubuntu-source:inside-container ubuntu
-```
+$ docker container run -d --name myubuntu -v ubuntu-sourcepath:inside-containerpath ubuntu
 
 ### Inspect new named volume
 
-```
-docker volume inspect mysql-db
-```
+docker volume inspect myubuntu
 
 # BIND MOUNTS
 
@@ -194,21 +191,50 @@ docker volume inspect mysql-db
 
 ### Run and be able to edit index.html file (local dir should have the Dockerfile and the index.html)
 
-```
 $ docker container run  -p 80:80 -v $(pwd):/usr/share/nginx/html nginx
-```
 
 ### Go into the container and check
 
-```
 $ docker container exec -it nginx bash
 $ cd /usr/share/nginx/html
-$ ls -al
-```
+$ ls -la
 
-### You could create a file in the container and it will exiost on the host as well
+### You could create a file in the container and it will exist on the host as well
 
-```
 $ touch test.txt
+$ echo "hello world" > test.txt
+ --- go to container 
+$ docker container exec -it nginx bash
+$ cd /usr/share/nginx/html
+$ ls -la
+ you can see test.txt file
+ $cat test.txt
+ 
+## Export & import image
+   -- export conatiner
+ 
+ $docker export conatinerid -o imagename.tar
+ $docker export containerid > imagename.tar
+ 
+  -- import container
+  
+$docker import imagename.tar image:latest
+
+ -- docker save and load are different from export and import
+ -- docker save will contains history and layers of images
+$docker save imagename -o newimage.tar
+
+$docker load newiage.tar
+
+## docker push
+
+$docker login --username=yourhubusername --email=youremail@company.com
+
+$docker tag my-image username/my-repo
+
+$ddocker push username/my-repo
+
+container have any update want to create image from container
+$docker commit containerid newimagename
 
     
