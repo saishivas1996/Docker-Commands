@@ -9,3 +9,6 @@ ENTRYPOINT [“/usr/sbin/nginx”,”-g”,”daemon off;”] ##used to specify 
 EXPOSE 80 ##eposing the port
 
 https://localhost:80
+
+docker build -t imagename:v1 .
+docker run -d -p 80:80 --name myimages imagename
