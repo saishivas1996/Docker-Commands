@@ -1,0 +1,117 @@
+--- Install Docker Compose, Run this below command and run the commands
+    ## curl -L "https://github.com/docker/compose/releases/download/1.10.0-rc2/dockercompose -$(uname -s) -$(uname -m)" -o /home/demo/docker-compose
+    ## chmod +x /home/demo/docker-compose
+    ## docker-compose --version
+    
+--- Now let’s go ahead and create our first Docker Compose file. All Docker Compose files are YAML files. if your good in YAML its easy to do docker-compose
+--- basic format of YAML:
+version: 'X'
+services:
+  web:
+    image: nginx
+    ports:
+     - "5000:5000"
+    volumes:
+     - .:/code
+  redis:
+    image: redis
+ 
+---Choose the editor well know to you and name the file like docker-compose.yml
+$nano docker-compose.yml
+
+
+version: '3'
+services:
+  web:
+    image: httpd
+
+    # Mapping of container port to host
+    
+    ports:
+      - "8080:80"
+    # Mount volume 
+    volumes:
+      - "/usercode/:/code"
+
+    # Link database container to app container 
+    # for reachability.
+    
+    links:
+      - "database:backenddb"
+    
+  database:
+
+    # image to fetch from docker hub
+    
+    image: mysql/mysql-server:5.7
+
+    # Environment variables for startup script
+    # container will use these variables
+    # to start the container with these define variables. 
+    
+    environment:
+    - "MYSQL_ROOT_PASSWORD=root"
+    - "MYSQL_USER=testuser"
+    - "MYSQL_PASSWORD=admin123"
+    - "MYSQL_DATABASE=backend"
+    
+    # Mount init.sql file to automatically run 
+    # and create tables for us.
+    # everything in docker-entrypoint-initdb.d folder
+    # is executed as soon as container is up nd running.
+    
+    volumes:
+      - "/usercode/db/init.sql:/docker-entrypoint-initdb.d/init.sql"
+      
+---Save the file and exit from the editor
+   
+  ## docker-compose build: This command builds images in the docker-compose.yml file.
+  ## docker-compose images: This command will list the images you’ve built using the current docker-compose file.
+  ## docker-compose run: This is similar to the docker run command. It will create containers from images built for the services mentioned in the compose file.
+  ## docker-compose up: This command does the work of the docker-compose build and docker-compose run commands. It builds the images if they are not located locally and starts the containers in foreground.
+  ## docker-compose up -d This command does the work of the docker-compose build and docker-compose run commands. It builds the images if they are not located locally and starts the containers in background.
+  
+---Example of Docker-compose with dockerfile:
+  
+version: '3'
+services:
+  web:
+    # Path to dockerfile.
+    # '.' represents the current directory in which
+    # docker-compose.yml is present.
+    build: .
+
+    # Mapping of container port to host
+    
+    ports:
+      - "5000:5000"
+    # Mount volume 
+    volumes:
+      - "/usercode/:/code"
+
+    # Link database container to app container 
+    # for reachability.
+    links:
+      - "database:backenddb"
+    
+  database:
+
+    # image to fetch from docker hub
+    image: mysql/mysql-server:5.7
+
+    # Environment variables for startup script
+    # container will use these variables
+    # to start the container with these define variables. 
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_USER=testuser"
+      - "MYSQL_PASSWORD=admin123"
+      - "MYSQL_DATABASE=backend"
+    # Mount init.sql file to automatically run 
+    # and create tables for us.
+    # everything in docker-entrypoint-initdb.d folder
+    # is executed as soon as container is up nd running.
+    volumes:
+      - "/usercode/db/init.sql:/docker-entrypoint-initdb.d/init.sql"
+    
+    
