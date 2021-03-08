@@ -12,3 +12,5 @@ https://localhost:80
 
 docker build -t imagename:v1 .
 docker run -d -p 80:80 --name myimages imagename
+
+#commnts for github cli
