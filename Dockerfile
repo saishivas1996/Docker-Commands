@@ -28,3 +28,4 @@ CMD ["nginx"]
 # Expose ports.
 EXPOSE 80
 EXPOSE 443 ##expose port ##committhrougcli
+           ##cli changes and taggings
