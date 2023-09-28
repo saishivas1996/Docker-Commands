@@ -30,3 +30,6 @@ CMD ["nginx"]
 EXPOSE 80
 EXPOSE 443 ##expose port ##committhrougcli
            ##cli changes and taggings
+           #commit in master
+##commit to master
+##rebase inmaster branch
