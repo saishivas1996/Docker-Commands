@@ -1,35 +1,16 @@
-#
-# Nginx Dockerfile
-#
-# https://github.com/dockerfile/nginx
-#
+FROM redhat/ubi8
 
-# Pull base image.
-FROM ubuntu
+RUN yum update && yum install wget -y
 
-# Install Nginx.
-RUN \
-  add-apt-repository -y ppa:nginx/stable && \
-  apt-get update && \
-  apt-get install -y nginx && \
-  apt-get install -y apache && \
-  rm -rf /var/lib/apt/lists/* && \
-  echo "\ndaemon off;" >> /etc/nginx/nginx.conf && \
-  chown -R www-data:www-data /var/lib/nginx
+RUN wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+RUN rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
 
-# Define mountable directories.
-VOLUME ["/etc/nginx/sites-enabled", "/etc/nginx/certs", "/etc/nginx/conf.d", "/var/log/nginx", "/var/www/html"]
+RUN yum install fontconfig java-17-openjdk -y
+RUN yum install jenkins -y
 
-# Define working directory.
-WORKDIR /etc/nginx
+RUN echo -e "root ALL=(ALL) ALL" >> /etc/sudoers
+RUN echo -e "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-# Define default command.
-CMD ["nginx"]
-
-# Expose ports.
-EXPOSE 80
-EXPOSE 443 ##expose port ##committhrougcli
-           ##cli changes and taggings
-           #commit in master
-##commit to master
-##rebase inmaster branch
+WORKDIR /var/lib/jenkins
+CMD java -jar /usr/share/java/jenkins.war
+EXPOSE 8080
